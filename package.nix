@@ -3,71 +3,70 @@
   stdenv,
   rustPlatform,
   installShellFiles,
+  versionCheckHook,
   nix-eval-jobs,
 }:
 
-let
-  fs = lib.fileset;
-  srcIgnored = fs.unions [
-    ./.github
-    ./CNAME
-
-    ./manual
-    ./integration-tests
-
-    ./default.nix
-    ./flake-compat.nix
-    ./package.nix
-    ./shell.nix
-  ];
-  srcFiles = fs.difference ./. srcIgnored;
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "colmena";
-  version = "0.5.0-pre";
+  version = "0.5.0";
 
-  src = fs.toSource {
+  __structuredAttrs = true;
+
+  src = lib.fileset.toSource {
     root = ./.;
-    fileset = srcFiles;
+    fileset = lib.fileset.difference ./. (
+      lib.fileset.unions [
+        ./.github
+        ./CNAME
+
+        ./manual
+        ./integration-tests
+
+        ./default.nix
+        ./flake-compat.nix
+        ./package.nix
+        ./shell.nix
+      ]
+    );
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoLock.lockFile = ./Cargo.lock;
+
+  buildInputs = [ nix-eval-jobs ];
+  env.NIX_EVAL_JOBS = lib.getExe nix-eval-jobs;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ nix-eval-jobs ];
-
-  NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
-
-  preBuild = ''
-    if [[ -z "$NIX_EVAL_JOBS" ]]; then
-      unset NIX_EVAL_JOBS
-    fi
-  '';
-
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd colmena \
       --bash <($out/bin/colmena gen-completions bash) \
-      --zsh <($out/bin/colmena gen-completions zsh) \
-      --fish <($out/bin/colmena gen-completions fish)
+      --fish <($out/bin/colmena gen-completions fish) \
+      --zsh <($out/bin/colmena gen-completions zsh)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   # Recursive Nix is not stable yet
   doCheck = false;
 
   passthru = {
     # We guarantee CLI and Nix API stability for the same minor version
-    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
+    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion finalAttrs.version));
   };
 
-  meta = with lib; {
-    description = "A simple, stateless NixOS deployment tool";
-    homepage = "https://colmena.cli.rs/${passthru.apiVersion}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
-    platforms = platforms.linux ++ platforms.darwin;
+  meta = {
+    description = "Simple, stateless NixOS deployment tool";
+    homepage = "https://colmena.cli.rs/${finalAttrs.passthru.apiVersion}";
+    downloadPage = "https://github.com/nix-community/colmena";
+    changelog = "https://github.com/nix-community/colmena/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      stepbrobd
+      zhaofengli
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "colmena";
   };
-}
+})

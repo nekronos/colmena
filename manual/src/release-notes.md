@@ -1,6 +1,6 @@
 # Release Notes
 
-## [Release 0.5.0](https://github.com/nix-community/colmena/releases/tag/v0.5.0) (unreleased)
+## [Release 0.5.0](https://github.com/nix-community/colmena/releases/tag/v0.5.0) (2026/09/22)
 
 This is a long overdue release more than 3 years after 0.4.0!
 
