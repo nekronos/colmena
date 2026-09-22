@@ -3,7 +3,7 @@
 [![Matrix Channel](https://img.shields.io/badge/Matrix-%23colmena%3Anixos.org-blueviolet)](https://matrix.to/#/#colmena:nixos.org)
 [![Stable Manual](https://img.shields.io/badge/Manual-Stable-informational)](https://colmena.cli.rs/stable)
 [![Unstable Manual](https://img.shields.io/badge/Manual-Unstable-orange)](https://colmena.cli.rs/unstable)
-[![Build](https://github.com/zhaofengli/colmena/actions/workflows/build.yml/badge.svg)](https://github.com/zhaofengli/colmena/actions/workflows/build.yml)
+[![Build](https://github.com/nix-community/colmena/actions/workflows/build.yml/badge.svg)](https://github.com/nix-community/colmena/actions/workflows/build.yml)
 
 Colmena is a simple, stateless [NixOS](https://nixos.org) deployment tool modeled after [NixOps](https://github.com/NixOS/nixops) and [morph](https://github.com/DBCDK/morph), written in Rust.
 It's a thin wrapper over Nix commands like `nix-instantiate` and `nix-copy-closure`, and supports parallel deployment.
@@ -39,7 +39,7 @@ nix-shell -p colmena
 To install the latest development version to your user profile:
 
 ```bash
-nix-env -if https://github.com/zhaofengli/colmena/tarball/main
+nix-env -if https://github.com/nix-community/colmena/tarball/main
 ```
 
 Alternatively, if you have a local clone of the repo:
@@ -49,7 +49,7 @@ nix-env -if default.nix
 ```
 
 A public binary cache is available at https://colmena.cachix.org, courtesy of Cachix.
-This binary cache contains unstable versions of Colmena built by [GitHub Actions](https://github.com/zhaofengli/colmena/actions).
+This binary cache contains unstable versions of Colmena built by [GitHub Actions](https://github.com/nix-community/colmena/actions).
 
 ## Tutorial
 
@@ -158,7 +158,7 @@ Here is a short example:
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    colmena.url = "github:zhaofengli/colmena";
+    colmena.url = "github:nix-community/colmena";
   };
   outputs = { nixpkgs, colmena, ... }: {
     colmenaHive = colmena.lib.makeHive {
@@ -202,7 +202,7 @@ Your flake needs to depend on Colmena itself as an input and expose a new output
  {
    inputs = {
 +    # ADDED: Colmena input
-+    colmena.url = "github:zhaofengli/colmena";
++    colmena.url = "github:nix-community/colmena";
 
      # ... Rest of configuration ...
    };

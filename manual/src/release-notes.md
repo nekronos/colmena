@@ -1,51 +1,51 @@
 # Release Notes
 
-## [Release 0.4.0](https://github.com/zhaofengli/colmena/releases/tag/v0.4.0) (2023/05/14)
+## [Release 0.4.0](https://github.com/nix-community/colmena/releases/tag/v0.4.0) (2023/05/14)
 
 - Flake evaluation is now actually pure by default. To enable impure expressions, pass `--impure`.
 - `--reboot` is added to trigger a reboot and wait for the node to come back up.
-- The target user is no longer explicitly set when `deployment.targetUser` is null ([#91](https://github.com/zhaofengli/colmena/pull/91)).
-- In `apply-local`, we now only escalate privileges during activation ([#85](https://github.com/zhaofengli/colmena/issues/85)).
-- Impure overlays are no longer imported by default if a path is specified in `meta.nixpkgs` ([#39](https://github.com/zhaofengli/colmena/issues/39))
+- The target user is no longer explicitly set when `deployment.targetUser` is null ([#91](https://github.com/nix-community/colmena/pull/91)).
+- In `apply-local`, we now only escalate privileges during activation ([#85](https://github.com/nix-community/colmena/issues/85)).
+- Impure overlays are no longer imported by default if a path is specified in `meta.nixpkgs` ([#39](https://github.com/nix-community/colmena/issues/39))
 - GC roots are now created right after the builds are complete, as opposed to after activation.
-- The [`meta.allowApplyAll`](./reference/meta.md#allowapplyall) option has been added. If set to false, deployments without a node filter (`--on`) are disallowed ([#95](https://github.com/zhaofengli/colmena/issues/95)).
-- The `--no-substitutes` option under the `apply` subcommand has been renamed to `--no-substitute` ([#59](https://github.com/zhaofengli/colmena/issues/59)).
-- The [`meta.nodeSpecialArgs`](./reference/meta.md#nodespecialargs) option has been added. It allows specifying node-specific `specialArgs` passed to NixOS modules ([#100](https://github.com/zhaofengli/colmena/pull/100)).
+- The [`meta.allowApplyAll`](./reference/meta.md#allowapplyall) option has been added. If set to false, deployments without a node filter (`--on`) are disallowed ([#95](https://github.com/nix-community/colmena/issues/95)).
+- The `--no-substitutes` option under the `apply` subcommand has been renamed to `--no-substitute` ([#59](https://github.com/nix-community/colmena/issues/59)).
+- The [`meta.nodeSpecialArgs`](./reference/meta.md#nodespecialargs) option has been added. It allows specifying node-specific `specialArgs` passed to NixOS modules ([#100](https://github.com/nix-community/colmena/pull/100)).
 - The [`repl`](./reference/cli.html#colmena-repl) subcommand has been added. It allows you to start an [interactive REPL](./features/eval.md#interactive-repl) with access to the complete node configurations.
-- The default goal for `colmena apply` is now `boot` if `--reboot` is specified, and `switch` otherwise ([#113](https://github.com/zhaofengli/colmena/issues/113)).
-- Post-activation keys are now uploaded after the reboot if `--reboot` is specified ([#113](https://github.com/zhaofengli/colmena/issues/113)).
+- The default goal for `colmena apply` is now `boot` if `--reboot` is specified, and `switch` otherwise ([#113](https://github.com/nix-community/colmena/issues/113)).
+- Post-activation keys are now uploaded after the reboot if `--reboot` is specified ([#113](https://github.com/nix-community/colmena/issues/113)).
 - Flake-enabled deployments now use the new SSH store protocol (`ssh-ng://`).
 
-## [Release 0.3.2](https://github.com/zhaofengli/colmena/releases/tag/v0.3.1) (2022/09/29)
+## [Release 0.3.2](https://github.com/nix-community/colmena/releases/tag/v0.3.1) (2022/09/29)
 
 - Fixed: [Key services](https://colmena.cli.rs/0.3/features/keys.html#key-services) were using the deprecated `inotifyTools` alias removed from `nixos-unstable` ([NixOS/nixpkgs#192681](https://github.com/NixOS/nixpkgs/pull/192681)).
 
-## [Release 0.3.1](https://github.com/zhaofengli/colmena/releases/tag/v0.3.1) (2022/08/18)
+## [Release 0.3.1](https://github.com/nix-community/colmena/releases/tag/v0.3.1) (2022/08/18)
 
-- Fixed: Streaming evaluation fails for node names containing periods ([#92](https://github.com/zhaofengli/colmena/issues/92))
-- Fixed: Streaming evaluation fails in non-flake deployments with relative paths ([#107](https://github.com/zhaofengli/colmena/issues/107))
-- Fixed: `colmena apply-local` returning non-zero exit code when successful ([#111](https://github.com/zhaofengli/colmena/issues/111))
+- Fixed: Streaming evaluation fails for node names containing periods ([#92](https://github.com/nix-community/colmena/issues/92))
+- Fixed: Streaming evaluation fails in non-flake deployments with relative paths ([#107](https://github.com/nix-community/colmena/issues/107))
+- Fixed: `colmena apply-local` returning non-zero exit code when successful ([#111](https://github.com/nix-community/colmena/issues/111))
 
-## [Release 0.3.0](https://github.com/zhaofengli/colmena/releases/tag/v0.3.0) (2022/04/27)
+## [Release 0.3.0](https://github.com/nix-community/colmena/releases/tag/v0.3.0) (2022/04/27)
 
-- [Remote builds](https://colmena.cli.rs/0.3/features/remote-builds.html) are now supported ([#33](https://github.com/zhaofengli/colmena/issues/33)).
+- [Remote builds](https://colmena.cli.rs/0.3/features/remote-builds.html) are now supported ([#33](https://github.com/nix-community/colmena/issues/33)).
 - [Streaming evaluation](https://colmena.cli.rs/0.3/features/parallelism.html#parallel-evaluation-experimental) powered by [nix-eval-jobs](https://github.com/nix-community/nix-eval-jobs) is now available as an experimental feature (`--evaluator streaming`).
 - Colmena can now run on macOS to deploy to NixOS hosts using [remote building](https://colmena.cli.rs/0.3/features/remote-builds.html).
 - It's now possible to configure output colorization via the CLI and environment variables. Colmena follows the [clicolors](https://bixense.com/clicolors) standard.
-- [A systemd unit](https://colmena.cli.rs/0.3/features/keys.html#key-services) (`${name}-key.service`) is now created for each secret file deployed using `deployment.keys` ([#48](https://github.com/zhaofengli/colmena/issues/48)).
+- [A systemd unit](https://colmena.cli.rs/0.3/features/keys.html#key-services) (`${name}-key.service`) is now created for each secret file deployed using `deployment.keys` ([#48](https://github.com/nix-community/colmena/issues/48)).
 - Node enumeration is now faster if you do not filter against tags with `--on @tag-name`.
 - The main deployment logic has been rewritten to be cleaner and easier to follow.
-- There are now [end-to-end tests](https://github.com/zhaofengli/colmena/tree/main/integration-tests) to ensure that the development branch is actually functional as a whole at all times.
+- There are now [end-to-end tests](https://github.com/nix-community/colmena/tree/main/integration-tests) to ensure that the development branch is actually functional as a whole at all times.
 
-## [Release 0.2.2](https://github.com/zhaofengli/colmena/releases/tag/v0.2.2) (2022/03/08)
+## [Release 0.2.2](https://github.com/nix-community/colmena/releases/tag/v0.2.2) (2022/03/08)
 
-This bugfix release fixes NixOS detection so `apply-local` works with the latest changes in `nixos-unstable` ([#63](https://github.com/zhaofengli/colmena/pull/63)). Additionally, `--no-keys` was fixed in `apply-local`.
+This bugfix release fixes NixOS detection so `apply-local` works with the latest changes in `nixos-unstable` ([#63](https://github.com/nix-community/colmena/pull/63)). Additionally, `--no-keys` was fixed in `apply-local`.
 
-## [Release 0.2.1](https://github.com/zhaofengli/colmena/releases/tag/v0.2.1) (2022/01/26)
+## [Release 0.2.1](https://github.com/nix-community/colmena/releases/tag/v0.2.1) (2022/01/26)
 
-This bugfix release fixes the issue ([#50](https://github.com/zhaofengli/colmena/issues/50)) where [sandboxed documentation builds](https://github.com/NixOS/nixpkgs/pull/149532) fail when using the unstable Nixpkgs channel.
+This bugfix release fixes the issue ([#50](https://github.com/nix-community/colmena/issues/50)) where [sandboxed documentation builds](https://github.com/NixOS/nixpkgs/pull/149532) fail when using the unstable Nixpkgs channel.
 
-## [Release 0.2.0](https://github.com/zhaofengli/colmena/releases/tag/v0.2.0) (2021/11/18)
+## [Release 0.2.0](https://github.com/nix-community/colmena/releases/tag/v0.2.0) (2021/11/18)
 
 This is release 0.2.0, the first stable release of Colmena!
 
