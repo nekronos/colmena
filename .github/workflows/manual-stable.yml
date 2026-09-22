@@ -1,13 +1,14 @@
-# This is the workflow file to deploy the user manual for
-# the next stable release. For the one that is currently in
-# effect, check the release branches (e.g., release-0.2.x).
+# This workflow deploys the user manual for stable releases.
+# Every release branch publishes the manual for its own API
+# version, and the /stable redirect farm is updated only when
+# that version matches .github/latest_stable_api on main.
 
 name: Deploy Stable Manual
 
 on:
   push:
     branches:
-      - release-0.5.x
+      - 'release-*'
 jobs:
   deploy:
     name: Deploy
