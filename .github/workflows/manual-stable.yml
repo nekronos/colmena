@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'nix-community/colmena'
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v7.0.1
 
