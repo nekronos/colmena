@@ -13,7 +13,7 @@ jobs:
     name: Deploy
 
     runs-on: ubuntu-latest
-    if: github.repository == 'nix-community/colmena'
+    if: github.repository == 'nix-community/colmena' && github.event.workflow_run.conclusion == 'success'
 
     permissions:
       contents: write
