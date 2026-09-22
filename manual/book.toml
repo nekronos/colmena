@@ -6,8 +6,8 @@ title    = "Colmena (Unstable)"
 
 [output.html]
 site-url           = "/unstable/"
-git-repository-url = "https://github.com/zhaofengli/colmena"
-edit-url-template  = "https://github.com/zhaofengli/colmena/edit/main/manual/{path}"
+git-repository-url = "https://github.com/nix-community/colmena"
+edit-url-template  = "https://github.com/nix-community/colmena/edit/main/manual/{path}"
 
 [output.linkcheck2]
 follow-web-links = false

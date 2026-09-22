@@ -20,7 +20,7 @@ If you are interested in trying out the bleeding-edge version of Colmena, Read [
 To install the latest development version to the user profile, use the following command:
 
 ```bash
-nix-env -if https://github.com/zhaofengli/colmena/tarball/main
+nix-env -if https://github.com/nix-community/colmena/tarball/main
 ```
 
 To install the latest stable version, read [the corresponding Manual](https://colmena.cli.rs/stable) for instructions.
@@ -28,7 +28,7 @@ To install the latest stable version, read [the corresponding Manual](https://co
 ### Unstable Binary Cache
 
 A public binary cache is available at [https://colmena.cachix.org](https://colmena.cachix.org), courtesy of Cachix.
-This binary cache contains unstable versions of Colmena built by [GitHub Actions](https://github.com/zhaofengli/colmena/actions).
+This binary cache contains unstable versions of Colmena built by [GitHub Actions](https://github.com/nix-community/colmena/actions).
 <!-- UNSTABLE_END -->
 
 ## Basic Configuration

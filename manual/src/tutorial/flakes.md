@@ -20,21 +20,21 @@ If you are interested in trying out the bleeding-edge version of Colmena, Read [
 To quickly try Colmena out, use the following command to enter an ephemeral environment with the latest development version of `colmena`:
 
 ```bash
-nix shell github:zhaofengli/colmena
+nix shell github:nix-community/colmena
 ```
 
 To install Colmena to the user profile, use the following command:
 
 ```bash
-nix-env -if https://github.com/zhaofengli/colmena/tarball/main
+nix-env -if https://github.com/nix-community/colmena/tarball/main
 ```
 
-You can also add `github:zhaofengli/colmena` as an input in your Flake and add the `colmena` package to your `devShell`.
+You can also add `github:nix-community/colmena` as an input in your Flake and add the `colmena` package to your `devShell`.
 
 ### Unstable Binary Cache
 
 A public binary cache is available at [https://colmena.cachix.org](https://colmena.cachix.org), courtesy of Cachix.
-This binary cache contains unstable versions of Colmena built by [GitHub Actions](https://github.com/zhaofengli/colmena/actions).
+This binary cache contains unstable versions of Colmena built by [GitHub Actions](https://github.com/nix-community/colmena/actions).
 <!-- UNSTABLE_END -->
 
 ## Basic Configuration
@@ -47,7 +47,7 @@ Here is a short example:
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    colmena.url = "github:zhaofengli/colmena";
+    colmena.url = "github:nix-community/colmena";
   };
   outputs = { nixpkgs, colmena, ... }: {
     colmenaHive = colmena.lib.makeHive {
@@ -102,7 +102,7 @@ Your flake needs to depend on Colmena itself as an input and expose a new output
  {
    inputs = {
 +    # ADDED: Colmena input
-+    colmena.url = "github:zhaofengli/colmena";
++    colmena.url = "github:nix-community/colmena";
 
      # ... Rest of configuration ...
    };

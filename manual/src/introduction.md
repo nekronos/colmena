@@ -19,7 +19,7 @@ Interested? Get started [here](./tutorial/index.md)!
 </div></pre>
 
 <!-- UNSTABLE_BEGIN -->
-You are currently reading **the unstable version** of the Colmena Manual, built against the tip of [the development branch](https://github.com/zhaofengli/colmena).
+You are currently reading **the unstable version** of the Colmena Manual, built against the tip of [the development branch](https://github.com/nix-community/colmena).
 Features described here will eventually become a part of **version @apiVersion@**.
 <!-- UNSTABLE_END -->
 
@@ -29,6 +29,6 @@ You are currently reading **version @apiVersion@** of the Colmena Manual, built 
 
 ## Links
 
-- [GitHub](https://github.com/zhaofengli/colmena)
+- [GitHub](https://github.com/nix-community/colmena)
 - [Deployment Options Reference](reference/deployment.md)
 - [Matrix Chat (#colmena:nixos.org)](https://matrix.to/#/#colmena:nixos.org)
