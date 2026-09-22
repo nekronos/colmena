@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "colmena";
-  version = "0.5.0";
+  version = "0.6.0-pre";
 
   __structuredAttrs = true;
 
