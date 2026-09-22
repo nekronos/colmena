@@ -13,7 +13,7 @@ jobs:
     name: Deploy
 
     runs-on: ubuntu-latest
-    if: github.repository == 'zhaofengli/colmena'
+    if: github.repository == 'nix-community/colmena'
 
     steps:
       - uses: actions/checkout@v7.0.1

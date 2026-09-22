@@ -13,7 +13,7 @@ jobs:
     name: Deploy
 
     runs-on: ubuntu-latest
-    if: github.repository == 'zhaofengli/colmena'
+    if: github.repository == 'nix-community/colmena'
 
     steps:
       - uses: actions/checkout@v7.0.1
@@ -32,7 +32,7 @@ jobs:
         run: echo "api_version=$(nix eval .#colmena.apiVersion | sed 's|\"||g')" >> $GITHUB_ENV
 
       - name: Check latest stable API version
-        run: echo "latest_stable_api=$(curl -L https://raw.githubusercontent.com/zhaofengli/colmena/main/.github/latest_stable_api)" >> $GITHUB_ENV
+        run: echo "latest_stable_api=$(curl -L https://raw.githubusercontent.com/nix-community/colmena/main/.github/latest_stable_api)" >> $GITHUB_ENV
 
       # == Manual
       - name: Build manual
