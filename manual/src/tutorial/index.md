@@ -20,7 +20,7 @@ If you are interested in trying out the bleeding-edge version of Colmena, Read [
 To install the latest development version to the user profile, use the following command:
 
 ```bash
-nix-env -if https://github.com/nix-community/colmena/tarball/main
+nix profile add github:nix-community/colmena
 ```
 
 To install the latest stable version, read [the corresponding Manual](https://colmena.cli.rs/stable) for instructions.

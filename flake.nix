@@ -2,51 +2,36 @@
   description = "A simple, stateless NixOS deployment tool modeled after NixOps.";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    stable.url = "github:NixOS/nixpkgs/release-26.05";
-
-    nix-github-actions = {
-      url = "github:nix-community/nix-github-actions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    flake-utils.url = "github:numtide/flake-utils";
-
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
-    };
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    stable.url = "github:nixos/nixpkgs/release-26.05";
+    systems.url = "github:nix-systems/triplet";
+    nix-github-actions.url = "github:nix-community/nix-github-actions";
+    nix-github-actions.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
-    {
+    inputs@{
       self,
       nixpkgs,
       stable,
-      flake-utils,
+      systems,
       nix-github-actions,
       ...
-    }@inputs:
+    }:
     let
-      supportedSystems = [
-        "x86_64-linux"
-        "i686-linux"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
+      eachSystem = nixpkgs.lib.genAttrs (import systems);
       colmenaOptions = import ./src/nix/hive/options.nix;
       colmenaModules = import ./src/nix/hive/modules.nix;
     in
-    flake-utils.lib.eachSystem supportedSystems (
-      system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-      rec {
-        # We still maintain the expression in a Nixpkgs-acceptable form
-        defaultPackage = self.packages.${system}.colmena;
-        packages = rec {
-          colmena = pkgs.callPackage ./package.nix { };
+    {
+      packages = eachSystem (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        rec {
+          colmena = pkgs.callPackage ./default.nix { };
+          default = colmena;
 
           # Full user manual
           manual =
@@ -99,72 +84,66 @@
 
           # User manual with the version treated as stable
           manualForceStable = manual.override { unstable = false; };
-        };
+        }
+      );
 
-        defaultApp = self.apps.${system}.colmena;
-        apps.default = self.apps.${system}.colmena;
-        apps.colmena = {
-          type = "app";
-          program = "${defaultPackage}/bin/colmena";
-        };
+      devShells = eachSystem (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            inputsFrom = [
+              self.packages.${system}.colmena
+              self.packages.${system}.manualFast
+            ];
 
-        devShell = pkgs.mkShell {
-          RUST_SRC_PATH = pkgs.rustPlatform.rustLibSrc;
-          NIX_PATH = "nixpkgs=${pkgs.path}";
+            packages = with pkgs; [
+              bashInteractive
+              cargo-audit
+              cargo-nextest
+              cargo-outdated
+              clippy
+              editorconfig-checker
+              nix
+              nixfmt
+              rust-analyzer
+              rustfmt
+            ];
 
-          inputsFrom = [
-            defaultPackage
-            packages.manualFast
-          ];
-          packages = with pkgs; [
-            bashInteractive
-            editorconfig-checker
-            nixfmt
-            clippy
-            rust-analyzer
-            cargo-outdated
-            cargo-audit
-            rustfmt
-            python3
-            python3Packages.flake8
-
-            nix
-          ];
-        };
-        checks =
-          let
-            inputsOverlay = final: prev: {
-              _inputs = inputs;
+            env = {
+              NIX_PATH = "nixpkgs=${pkgs.path}";
+              RUST_SRC_PATH = pkgs.rustPlatform.rustLibSrc;
             };
-          in
-          if pkgs.stdenv.isLinux then
-            import ./integration-tests {
-              pkgs = import nixpkgs {
-                inherit system;
-                overlays = [
-                  self.overlays.default
-                  inputsOverlay
-                ];
-              };
-              pkgsStable = import stable {
-                inherit system;
-                overlays = [
-                  self.overlays.default
-                  inputsOverlay
-                ];
-              };
-            }
-          else
-            { };
+          };
+        }
+      );
 
-        formatter = pkgs.callPackage ./formatter.nix { };
-      }
-    )
-    // {
-      overlay = self.overlays.default;
-      overlays.default = final: prev: {
-        colmena = final.callPackage ./package.nix { };
+      checks = eachSystem (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          overlays = [
+            self.overlays.default
+            (_: _: { inherit inputs; })
+          ];
+        in
+        if pkgs.stdenv.hostPlatform.isLinux then
+          import ./integration-tests {
+            pkgs = import nixpkgs { inherit system overlays; };
+            pkgsStable = import stable { inherit system overlays; };
+          }
+        else
+          { }
+      );
+
+      formatter = eachSystem (system: nixpkgs.legacyPackages.${system}.callPackage ./formatter.nix { });
+
+      overlays.default = final: _: {
+        colmena = final.callPackage ./default.nix { };
       };
+
       nixosModules = {
         inherit (colmenaOptions) deploymentOptions metaOptions;
         inherit (colmenaModules) keyChownModule keyServiceModule assertionModule;
@@ -185,11 +164,7 @@
     };
 
   nixConfig = {
-    extra-substituters = [
-      "https://colmena.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
-    ];
+    extra-substituters = [ "https://colmena.cachix.org" ];
+    extra-trusted-public-keys = [ "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg=" ];
   };
 }

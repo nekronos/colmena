@@ -169,8 +169,8 @@ let
         extraDeployerConfig
       ];
 
-      nix.registry = lib.mkIf (pkgs ? _inputs) {
-        nixpkgs.flake = pkgs._inputs.nixpkgs;
+      nix.registry = lib.mkIf (pkgs ? inputs) {
+        nixpkgs.flake = pkgs.inputs.nixpkgs;
       };
 
       nix.nixPath = [

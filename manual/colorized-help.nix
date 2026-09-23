@@ -13,7 +13,7 @@ let
     null
     "apply"
   ]
-  ++ lib.optional stdenv.isLinux "apply-local"
+  ++ lib.optional stdenv.hostPlatform.isLinux "apply-local"
   ++ [
     "build"
     "upload-keys"

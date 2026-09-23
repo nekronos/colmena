@@ -39,13 +39,13 @@ nix-shell -p colmena
 To install the latest development version to your user profile:
 
 ```bash
-nix-env -if https://github.com/nix-community/colmena/tarball/main
+nix profile add github:nix-community/colmena
 ```
 
 Alternatively, if you have a local clone of the repo:
 
 ```bash
-nix-env -if default.nix
+nix profile add .
 ```
 
 A public binary cache is available at https://colmena.cachix.org, courtesy of Cachix.
