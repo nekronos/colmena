@@ -1,6 +1,6 @@
 {
-  pkgs ? import ./nixpkgs.nix,
-  pkgsStable ? import ./nixpkgs-stable.nix,
+  pkgs,
+  pkgsStable,
 }:
 
 {

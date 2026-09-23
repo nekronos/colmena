@@ -14,8 +14,8 @@ let
 
   applyFlags = "--evaluator ${evaluator} ${extraApplyFlags}" + lib.optionalString (!pure) "--impure";
 
-  # From integration-tests/nixpkgs.nix
-  colmenaFlakeInputs = pkgs._inputs;
+  # From the inputs overlay of the flake checks
+  colmenaFlakeInputs = pkgs.inputs;
 in
 tools.runTest {
   name = "colmena-flakes-${evaluator}" + lib.optionalString (!pure) "-impure";
@@ -30,7 +30,7 @@ tools.runTest {
     testScript = ''
       import re
 
-      deployer.succeed("sed -i 's @nixpkgs@ path:${pkgs._inputs.nixpkgs.outPath}?narHash=${pkgs._inputs.nixpkgs.narHash} g' /tmp/bundle/flake.nix")
+      deployer.succeed("sed -i 's @nixpkgs@ path:${pkgs.inputs.nixpkgs.outPath}?narHash=${pkgs.inputs.nixpkgs.narHash} g' /tmp/bundle/flake.nix")
       deployer.succeed("sed -i 's @colmena@ path:${tools.colmena.src} g' /tmp/bundle/flake.nix")
 
       with subtest("Lock flake dependencies"):
