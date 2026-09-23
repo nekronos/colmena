@@ -26,7 +26,7 @@ nix shell github:nix-community/colmena
 To install Colmena to the user profile, use the following command:
 
 ```bash
-nix-env -if https://github.com/nix-community/colmena/tarball/main
+nix profile add github:nix-community/colmena
 ```
 
 You can also add `github:nix-community/colmena` as an input in your Flake and add the `colmena` package to your `devShell`.
