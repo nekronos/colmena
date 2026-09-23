@@ -231,10 +231,7 @@ fn get_nix_flags(opts: &Opts) -> NixFlags {
     flags.set_show_trace(opts.show_trace);
     flags.set_impure(opts.impure);
 
-    for chunks in opts.nix_option.chunks_exact(2) {
-        let [name, value] = chunks else {
-            unreachable!()
-        };
+    for [name, value] in opts.nix_option.as_chunks::<2>().0 {
         flags.add_option(name.clone(), value.clone());
     }
 
